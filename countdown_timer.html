@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+
+        }
+        #timer {
+            font-size: 2em;
+            margin: 20px;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        input[type="number"] {
+            font-size: 1em;
+            padding: 5px;
+            width: 60px;
+        }
+        body {
+  background-color: #0ff1df;
+}
+    </style>
+</head>
+<body>
+    <div>
+        Set countdown time (in seconds):
+        <input type="number" id="setTime" value="60">
+        <button id="set">Set</button>
+    </div>
+    <div id="timer">00:00:00</div>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <button id="reset">Reset</button>
+
+    <script>
+        let timer;
+        let isRunning = false;
+        let secondsRemaining = 0;
+
+        function updateTimer() {
+            if (secondsRemaining <= 0) {
+                clearInterval(timer);
+                isRunning = false;
+                document.getElementById('timer').textContent = '00:00:00';
+            } else {
+                const hours = Math.floor(secondsRemaining / 3600);
+                const minutes = Math.floor((secondsRemaining % 3600) / 60);
+                const seconds = secondsRemaining % 60;
+
+                const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                document.getElementById('timer').textContent = timeString;
+
+                secondsRemaining--;
+            }
+        }
+
+        document.getElementById('set').addEventListener('click', () => {
+            const setTime = parseInt(document.getElementById('setTime').value);
+            secondsRemaining = setTime;
+            const hours = Math.floor(setTime / 3600);
+            const minutes = Math.floor((setTime % 3600) / 60);
+            const seconds = setTime % 60;
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timer').textContent = timeString;
+        });
+
+        document.getElementById('start').addEventListener('click', () => {
+            if (!isRunning) {
+                isRunning = true;
+                timer = setInterval(updateTimer, 1000);
+            }
+        });
+
+        document.getElementById('stop').addEventListener('click', () => {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timer);
+            }
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            isRunning = false;
+            clearInterval(timer);
+            document.getElementById('timer').textContent = '00:00:00';
+        });
+    </script>
+</body>
+</html>
